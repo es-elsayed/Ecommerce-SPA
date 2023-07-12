@@ -1,10 +1,11 @@
 import './bootstrap';
 import '../../css/admin/app.css';
-
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../../vendor/tightenco/ziggy/dist/vue.m';
+import { i18nVue } from 'laravel-vue-i18n'
+import { getActiveLanguage } from 'laravel-vue-i18n';
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
@@ -15,6 +16,13 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue, Ziggy)
+            .use(i18nVue, {
+                lang: getActiveLanguage,
+                resolve: async lang => {
+                    const langs = import.meta.glob('../../../lang/*.json');
+                    return await langs[`../../../lang/${lang}.json`]();
+                }
+            })
             .mount(el);
     },
     progress: {
