@@ -25,17 +25,20 @@ const props = defineProps({
     routeResourceName: {
         type: String,
         required: true,
+    },
+    permissions: {
+        type: Array,
     }
 });
 
 const form = useForm({
-    name: props.item.name ?? "",
-    guard_name: props.item.guard_name ?? "",
+    title: props.item.title ?? "",
+    description: props.item.description ?? "",
 });
 
 
 const submit = () => {
-    props.action === 'create' ?
+    props.action  === 'create' ?
         form.post(route(`admin.${props.routeResourceName}.store`)) :
         form.put(route(`admin.${props.routeResourceName}.update`, props.item.id));
 
@@ -57,7 +60,8 @@ const submit = () => {
             <Card>
                 <form @submit.prevent="submit" class="mt-6 space-y-6">
 
-                    <FormInput v-model="form.name" id="name" required label="Name" :error-message="form.errors.name" />
+                    <FormInput v-model="form.title" id="title" required label="Title" :error-message="form.errors.title" />
+                    <FormInput v-model="form.description" id="description" required label="Description" :error-message="form.errors.description" />
 
                     <Button color="black" type="submit" :disabled="form.processing">
                         {{ form.processing ? 'Saving...' : 'Save' }}

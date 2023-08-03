@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class PermissionRequest extends FormRequest
+class TodoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,8 @@ class PermissionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', Rule::unique('permissions', 'name')->ignore($this->role)],
+            'title' => ['string', 'required'],
+            'description' => ['string', 'nullable'],
         ];
     }
 }

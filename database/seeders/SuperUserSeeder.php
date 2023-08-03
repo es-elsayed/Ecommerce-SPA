@@ -14,13 +14,11 @@ class SuperUserSeeder extends Seeder
     public function run(): void
     {
 
-        $admin = User::factory()->create([
+        User::factory()->create([
             'name' => "Islam Abdu",
             'email' => 'islam3bdu@gmail.com',
             'password' => Hash::make('12345678'),
         ]);
-
-        $admin->assignRole('super-admin');
 
     }
 }

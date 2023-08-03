@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RoleResource extends JsonResource
+class TodoResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,10 @@ class RoleResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'guard_name' => $this->guard_name,
+            'title' => $this->title,
+            'description' => $this->description,
+            'completed_at' => $this->completed_at,
             'created_at' => $this->created_at?->toDayDateTimeString(),
-            'permissions' => PermissionResource::collection($this->whenLoaded('permissions')),
         ];
     }
 }

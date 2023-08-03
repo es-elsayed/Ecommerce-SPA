@@ -8,11 +8,8 @@ import NavLink from '@/admin/Components/Nav/NavLink.vue';
         <NavLink :href="route('admin.dashboard')" :active="route().current('admin.dashboard')">
             Dashboard
         </NavLink>
-        <NavLink :href="route('admin.roles.index')" :active="route().current('admin.roles.*')">
-            Role
-        </NavLink>
-        <NavLink :href="route('admin.permissions.index')" :active="route().current('admin.permissions.*')">
-            Permission
+        <NavLink :href="route('admin.todos.index')" :active="route().current('admin.todos.*')">
+            Todo
         </NavLink>
     </div>
 </template>
