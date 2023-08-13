@@ -1,10 +1,9 @@
 <script setup>
-import Button from '@/admin/Components/Buttons/Button.vue';
-import InputError from '@/admin/Components/InputError.vue';
-import InputLabel from '@/admin/Components/InputLabel.vue';
+import Button from '@/admin/Components/Base/Button.vue';
+import Error from '@/admin/Components/Form/Error.vue';
+import Label from '@/admin/Components/Form/Label.vue';
 import Modal from '@/admin/Components/Modal.vue';
-import SecondaryButton from '@/admin/Components/Buttons/SecondaryButton.vue';
-import TextInput from '@/admin/Components/TextInput.vue';
+import Input from '@/admin/Components/Form/Input.vue';
 import { useForm } from '@inertiajs/vue3';
 import { nextTick, ref } from 'vue';
 
@@ -48,7 +47,7 @@ const closeModal = () => {
             </p>
         </header>
 
-        <Button @click="confirmUserDeletion" color="danger">Delete Account</Button>
+        <Button @click="confirmUserDeletion" color="red">Delete Account</Button>
 
         <Modal :show="confirmingUserDeletion" @close="closeModal" title="Are you sure you want to delete your account?">
 
@@ -58,18 +57,18 @@ const closeModal = () => {
             </template>
 
             <div class="mt-6">
-                <InputLabel for="password" value="Password" class="sr-only" />
+                <Label for="password" value="Password" class="sr-only" />
 
-                <TextInput id="password" ref="passwordInput" v-model="form.password" type="password"
+                <Input id="password" ref="passwordInput" v-model="form.password" type="password"
                     class="block w-3/4 mt-1" placeholder="Password" @keyup.enter="deleteUser" />
 
-                <InputError :message="form.errors.password" class="mt-2" />
+                <Error :message="form.errors.password" class="mt-2" />
             </div>
 
             <template #footer>
-                <Button color="secondary" @click="closeModal"> Cancel </Button>
+                <Button color="white" @click="closeModal"> Cancel </Button>
 
-                <Button color="danger" class="ml-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
+                <Button color="red" class="ml-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
                     @click="deleteUser">
                     Delete Account
                 </Button>

@@ -1,6 +1,7 @@
 <script setup>
-import { Head } from '@inertiajs/vue3';
-
+import { ref, watch, onMounted } from 'vue';
+import { Head, useForm, router } from '@inertiajs/vue3';
+// import { Inertia } from "@inertiajs/inertia";
 import AuthenticatedLayout from '@/admin/Layouts/AuthenticatedLayout.vue';
 import Container from '@/admin/Components/Container.vue';
 import Modal from '@/admin/Components/Modal.vue';
@@ -35,6 +36,7 @@ const props = defineProps({
         required: true,
     },
     can: Object
+
 })
 
 const {
@@ -57,17 +59,13 @@ const { filters } = useFilter({
     <Head :title="title" />
 
     <AuthenticatedLayout :title="title">
-
         <template #actions>
             <Button v-if="can.create" color="black" :href="route(`admin.${routeResourceName}.create`)">Create</Button>
         </template>
 
         <Container>
-
-
             <Card class="mt-4">
                 <BasicFilter v-model="filters" />
-
                 <Table :headers="headers" :items="items">
                     <template v-slot="{ item }">
                         <Td v-for="header in headers">
@@ -84,7 +82,7 @@ const { filters } = useFilter({
                 <Modal :show="deleteModal" @close="closeModal" :title="`Delete: (${itemToDelete.name})`">
 
                     <template #description>
-                        Once you are delete , you un-able to restore it again.
+                        Once you are delete, you un-able to restore it again.
                     </template>
 
                     <template #footer>

@@ -5,7 +5,6 @@ import Container from '@/admin/Components/Container.vue';
 import Button from '@/admin/Components/Base/Button.vue';
 import Card from '@/admin/Components/Card/Card.vue';
 import InputGroup from '@/admin/Components/Form/InputGroup.vue';
-import Permissions from './Permissions.vue';
 
 
 const props = defineProps({
@@ -26,15 +25,11 @@ const props = defineProps({
     routeResourceName: {
         type: String,
         required: true,
-    },
-    permissions: {
-        type: Array,
     }
 });
 
 const form = useForm({
     name: props.item.name ?? "",
-    guard_name: props.item.guard_name ?? "",
 });
 
 
@@ -70,6 +65,5 @@ const submit = () => {
                 </form>
             </Card>
         </Container>
-        <Permissions v-if="action == 'edit'" :role="item" :permissions="permissions" />
     </AuthenticatedLayout>
 </template>

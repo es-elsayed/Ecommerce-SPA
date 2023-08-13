@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\RoleRequest;
+use App\Http\Requests\Admin\PermissionRequest;
 use App\Http\Resources\PermissionResource;
-use App\Http\Resources\RoleResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
-class RoleController extends Controller
+class PermissionController extends Controller
 {
-    private string $routeResourceName = 'roles';
+    private string $routeResourceName = 'permissions';
 
     public function __construct()
     {
@@ -26,14 +24,15 @@ class RoleController extends Controller
 
     public function index(Request $request)
     {
-        $role = Role::query()
+        $permission = Permission::query()
             ->select(['id', 'name', 'created_at'])
             ->when($request->search, fn(Builder $builder, $search) => $builder->where('name', 'like', "%{$search}%"))
             ->latest('id')
             ->paginate(10);
-        return Inertia::render('Role/Index', [
-            'title' => 'Roles',
-            'items' => RoleResource::collection($role),
+
+        return Inertia::render('Permission/Index', [
+            'title' => 'Permissions',
+            'items' => PermissionResource::collection($permission),
             'headers' => [
                 [
                     'label' => 'Name',
@@ -51,7 +50,7 @@ class RoleController extends Controller
             'routeResourceName' => $this->routeResourceName,
             'filters' => (object) $request->all(),
             'can' => [
-                'create' => $request->user()->can('roles-create'),
+                'create' => $request->user()?->can('permissions-create'),
             ],
         ]);
 
@@ -59,38 +58,35 @@ class RoleController extends Controller
 
     public function create()
     {
-        return Inertia::render('Role/Create', [
+        return Inertia::render('Permission/Create', [
             'action' => 'create',
             'routeResourceName' => $this->routeResourceName,
         ]);
     }
 
-    public function store(RoleRequest $request)
+    public function store(PermissionRequest $request)
     {
-        $role = Role::create($request->validated());
-        return to_route('admin.roles.edit', $role->id)->with('success', 'Role Created Successfully');
+        Permission::create($request->validated());
+        return to_route('admin.permissions.index')->with('success', 'Permission Created Successfully');
     }
-    public function edit(Role $role)
+    public function edit(Permission $permission)
     {
-        $role->load('permissions:permissions.id,permissions.name');
-
-        return Inertia::render('Role/Create', [
-            'item' => new RoleResource($role),
+        return Inertia::render('Permission/Create', [
+            'item' => new PermissionResource($permission),
             'action' => 'edit',
             'routeResourceName' => $this->routeResourceName,
-            'permissions' => PermissionResource::collection(Permission::get(['id', 'name'])),
         ]);
     }
 
-    public function update(RoleRequest $request, Role $role)
+    public function update(PermissionRequest $request, Permission $permission)
     {
-        $role->update($request->validated());
-        return to_route('admin.roles.index')->with('success', 'Role Updated Successfully');
+        $permission->update($request->validated());
+        return to_route('admin.permissions.index')->with('success', 'Permission Updated Successfully');
     }
 
-    public function destroy(Role $role)
+    public function destroy(Permission $permission)
     {
-        $role->delete();
-        return to_route('admin.roles.index')->with('error', 'Role Deleted Successfully');
+        $permission->delete();
+        return to_route('admin.permissions.index')->with('error', 'Permission Deleted Successfully');
     }
 }
