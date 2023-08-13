@@ -5,7 +5,7 @@ import Container from '@/admin/Components/Container.vue';
 import Button from '@/admin/Components/Base/Button.vue';
 import Card from '@/admin/Components/Card/Card.vue';
 import InputGroup from '@/admin/Components/Form/InputGroup.vue';
-import Permissions from './Permissions.vue';
+import SelectGroup from '@/admin/Components/Form/SelectGroup.vue';
 
 
 const props = defineProps({
@@ -27,14 +27,17 @@ const props = defineProps({
         type: String,
         required: true,
     },
-    permissions: {
+    roles: {
         type: Array,
     }
 });
 
 const form = useForm({
     name: props.item.name ?? "",
-    guard_name: props.item.guard_name ?? "",
+    email: props.item.email ?? "",
+    password:  "",
+    password_confirmation: "",
+    role_id: props.action == 'edit' ? (props.item.roles[0]?.id ?? "") : "",
 });
 
 
@@ -60,8 +63,23 @@ const submit = () => {
         <Container>
             <Card>
                 <form @submit.prevent="submit" class="mt-6 space-y-6">
+                    <div class="grid grid-cols-2 gap-6">
 
-                    <InputGroup v-model="form.name" id="name" required label="Name" :error-message="form.errors.name" />
+                        <InputGroup v-model="form.name" id="name" required label="Name" :error-message="form.errors.name" />
+
+                        <InputGroup type="email" v-model="form.email" id="email" required label="Email"
+                            :error-message="form.errors.email" />
+
+                        <InputGroup type="password" v-model="form.password" id="password" :required="action == 'create'"
+                            label="Password" :error-message="form.errors.password" />
+
+                        <InputGroup type="password" v-model="form.password_confirmation" id="password_confirmation"
+                            :required="action == 'create'" label="Confirm Password"
+                            :error-message="form.errors.password_confirmation" />
+
+                        <SelectGroup label="Role" v-model="form.role_id" :items="roles" :error-message="form.errors.role_id"
+                            required />
+                    </div>
 
                     <Button color="black" type="submit" :disabled="form.processing">
                         {{ form.processing ? 'Saving...' : 'Save' }}
@@ -70,6 +88,5 @@ const submit = () => {
                 </form>
             </Card>
         </Container>
-        <Permissions v-if="action == 'edit'" :role="item" :permissions="permissions" />
     </AuthenticatedLayout>
 </template>

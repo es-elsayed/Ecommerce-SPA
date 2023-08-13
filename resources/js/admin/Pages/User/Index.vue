@@ -1,7 +1,5 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue';
-import { Head, useForm, router } from '@inertiajs/vue3';
-// import { Inertia } from "@inertiajs/inertia";
+import { Head, } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/admin/Layouts/AuthenticatedLayout.vue';
 import Container from '@/admin/Components/Container.vue';
 import Modal from '@/admin/Components/Modal.vue';
@@ -68,14 +66,33 @@ const { filters } = useFilter({
                 <BasicFilter v-model="filters" />
                 <Table :headers="headers" :items="items">
                     <template v-slot="{ item }">
-                        <Td v-for="header in headers">
-                            <div v-if="header.data !== 'actions'">
+
+                        <Td>{{ item.name }}</Td>
+                        <Td>{{ item.email }}</Td>
+                        <Td>
+                            <Button color="blue" class="mx-1" small v-for="role in item.roles" :key="role.id">
+                                {{ role.name }}
+                            </Button>
+                        </Td>
+                        <Td>{{ item.created_at }}</Td>
+                        <Td>
+                            <Actions
+                                :edit-link="route(`admin.${routeResourceName}.edit`, item.id)" :show-edit="item.can.update"
+                                :show-delete="item.can.delete" @deleteClicked="showDeleteModal(item)" />
+                        </Td>
+                        <!-- <Td v-for="header in headers">
+                            <div v-if="!header.data.includes('roles', 'actions')">
                                 {{ item[header.data] }}
                             </div>
-                            <Actions v-else :edit-link="route(`admin.${routeResourceName}.edit`, item.id)"
+                            <div v-if="header.data == 'roles'">
+                                <Button color="blue" class="mx-1" small v-for="role in item.roles" :key="role.id">
+                                    {{ role.name }}
+                                </Button>
+                            </div>
+                            <Actions v-if="header.data == 'actions'" :edit-link="route(`admin.${routeResourceName}.edit`, item.id)"
                                 :show-edit="item.can.update" :show-delete="item.can.delete"
                                 @deleteClicked="showDeleteModal(item)" />
-                        </Td>
+                        </Td> -->
                     </template>
                 </Table>
 
